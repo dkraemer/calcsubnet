@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/vscode-remote/devcontainer.json
 {
   "image": "dkraemer/dev-node:latest",
-  //"name": "",
+  "name": "calcsubnet",
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   },
