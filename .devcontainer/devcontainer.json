@@ -9,7 +9,8 @@
     "EditorConfig.EditorConfig",
     "yzhang.markdown-all-in-one",
     "shd101wyy.markdown-preview-enhanced",
-    "visualstudioexptteam.vscodeintellicode"
+    "visualstudioexptteam.vscodeintellicode",
+    "adammaras.overtype"
   ],
   //"forwardPorts": [],
   "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/postCreate.sh"
