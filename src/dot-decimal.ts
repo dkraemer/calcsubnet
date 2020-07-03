@@ -1,6 +1,8 @@
+import { Dumpable } from './dumpable';
+
 const HEX_RADIX: number = 16;
 
-export abstract class DotDecimal {
+export abstract class DotDecimal implements Dumpable {
   public readonly hexString: string;
   public readonly dotDecimalString: string;
 
@@ -40,5 +42,15 @@ export abstract class DotDecimal {
 
   public toString(): string {
     return this.dotDecimalString;
+  }
+
+  public dump(): string[] {
+    let retVal: string[] = [
+      `value: ${this.value}`,
+      `hexString: ${this.hexString}`,
+      `dotDecimalString: ${this.dotDecimalString}`,
+    ];
+
+    return retVal;
   }
 }

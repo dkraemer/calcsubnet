@@ -37,6 +37,18 @@ export class SubnetMask extends DotDecimal {
     }
   }
 
+  public dump(): string[] {
+    let retVal: string[] = super.dump();
+    retVal.push(
+      `prefixLength: ${this.prefixLength}`,
+      `hostBitCount: ${this.hostBitCount}`,
+      `hostAddressCount: ${this.hostAddressCount}`,
+      `usableHostAddressCount: ${this.usableHostAddressCount}`,
+      `remark: ${this.remark}`
+    );
+    return retVal;
+  }
+
   private static checkPrefixLength(prefixLength: number): number {
     prefixLength = Math.round(prefixLength);
     if (prefixLength > MAX_PREFIX_LENGTH || prefixLength < 0) {
