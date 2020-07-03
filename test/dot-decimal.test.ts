@@ -6,7 +6,7 @@ class DotDecimalMock extends DotDecimal {
   }
 }
 
-test('DotDecimal()', () => {
+test('DotDecimal(value)', () => {
   expect(() => {
     new DotDecimalMock(-1);
   }).toThrow(Error);
@@ -22,7 +22,7 @@ test('DotDecimal()', () => {
   expect(new DotDecimalMock(0b10000011110111000001000011011100).dotDecimalString).toBe('131.220.16.220');
 });
 
-test('DotDecimal.parse()', () => {
+test('DotDecimal.parse(DotDecimalMock, ...)', () => {
   expect(DotDecimal.parse(DotDecimalMock, '') === null).toBe(true);
   expect(DotDecimal.parse(DotDecimalMock, 'foo') === null).toBe(true);
   expect(DotDecimal.parse(DotDecimalMock, '256.0.0.0') === null).toBe(true);
