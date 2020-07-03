@@ -1,9 +1,5 @@
 import { Dumpable } from './dumpable';
-
-enum Radix {
-  Dec = 10,
-  Hex = 16,
-}
+import { Radix } from './radix';
 
 export abstract class DotDecimal implements Dumpable {
   public readonly hexString: string;
