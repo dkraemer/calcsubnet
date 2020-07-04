@@ -63,25 +63,11 @@ export abstract class DotDecimal implements Dumpable {
 
   private toHexString(withPrefix: boolean = true): string {
     const prefix = withPrefix ? '0x' : '';
-    let hexValue = this.value.toString(Radix.Hex);
-
-    // Ensure a length of 4 bytes (8 chars)
-    while (hexValue.length < 8) {
-      hexValue = '0' + hexValue;
-    }
-
-    return prefix + hexValue;
+    return prefix + this.value.toString(Radix.Hex).padStart(8, '0');
   }
 
   private toBinString(): string {
-    let binValue = this.value.toString(Radix.Bin);
-
-    // Ensure a length of 32 bits (32 chars)
-    while (binValue.length < 32) {
-      binValue = '0' + binValue;
-    }
-
-    return binValue;
+    return this.value.toString(Radix.Bin).padStart(32, '0');
   }
 
   private getOctets(): number[] {
