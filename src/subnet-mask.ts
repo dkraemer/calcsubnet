@@ -1,84 +1,46 @@
 import { DotDecimal } from './dot-decimal';
-
-const MAX_PREFIX_LENGTH: number = 32;
+// import { Radix } from './radix';
 
 export class SubnetMask extends DotDecimal {
-  public readonly prefixLength: number;
-  public readonly hostBitCount: number;
-  public readonly hostAddressCount: number;
-  public readonly usableHostAddressCount: number;
-  public readonly remark: string;
+  // public readonly prefixLength: number;
+  // public readonly hostBitCount: number;
+  // public readonly hostAddressCount: number;
+  // public readonly usableHostAddressCount: number;
+  // public readonly remark: string;
 
-  private constructor(subnetMask: number, prefixLength: number, hostBitCount: number) {
-    super(subnetMask);
-    this.prefixLength = prefixLength;
-    this.hostBitCount = hostBitCount;
-    this.hostAddressCount = Math.pow(2, hostBitCount);
-    this.usableHostAddressCount = this.hostAddressCount - 2;
+  /**
+   * Create a new instance of SubnetMask.
+   * @param value The integer value of the subnet mask to create.
+   */
+  public constructor(value: number) {
+    super(value);
+  }
 
-    switch (prefixLength) {
-      case 32:
-        this.remark = '(Host route)';
-        this.usableHostAddressCount = 1;
-        break;
-      case 31:
-        this.remark = '(Point-to-point links (RFC 3021))';
-        this.usableHostAddressCount = 2;
-        break;
-      case 30:
-        this.remark = '(Point-to-point links (glue network))';
-        break;
-      case 8:
-        this.remark = '(Largest IANA block allocation)';
-        break;
-      default:
-        this.remark = '';
-        break;
+  /**
+   * Get all possible subnet masks as integer values.
+   */
+  public static getAllValues(): number[] {
+    const allValues: number[] = [];
+    for (let hostBitCount = 0; hostBitCount <= 32; hostBitCount++) {
+      const value = hostBitCount === 32 ? 0 : (0xffffffff << hostBitCount) >>> 0;
+      allValues.push(value);
     }
+    return allValues;
   }
 
-  public dump(): string[] {
-    let retVal: string[] = super.dump();
-    retVal.push(
-      `prefixLength: ${this.prefixLength}`,
-      `hostBitCount: ${this.hostBitCount}`,
-      `hostAddressCount: ${this.hostAddressCount}`,
-      `usableHostAddressCount: ${this.usableHostAddressCount}`,
-      `remark: ${this.remark}`
-    );
-    return retVal;
-  }
-
-  private static checkPrefixLength(prefixLength: number): number {
-    prefixLength = Math.round(prefixLength);
-    if (prefixLength > MAX_PREFIX_LENGTH || prefixLength < 0) {
-      throw new Error('Argument prefixLength ist out of range');
+  /**
+   * Get the prefix length for a subnet mask.
+   * @param value The integer value of the subnet mask.
+   */
+  public static getPrefixLength(value: number): number {
+    if (!this.getAllValues().includes(value)) {
+      throw new Error();
     }
-    return prefixLength;
-  }
-
-  public static create(prefixLength: number): SubnetMask {
-    this.checkPrefixLength(prefixLength);
-    let hostBitCount = MAX_PREFIX_LENGTH - prefixLength;
-    let subnetMask = prefixLength === 0 ? 0 : (Number.MAX_SAFE_INTEGER << hostBitCount) >>> 0;
-
-    return new SubnetMask(subnetMask, prefixLength, hostBitCount);
-  }
-
-  public static getAll(startPrefixLength: number = 32, endPrefixLength: number = 0): SubnetMask[] {
-    this.checkPrefixLength(startPrefixLength);
-    this.checkPrefixLength(endPrefixLength);
-
-    let subnetMasks: Array<SubnetMask> = [];
-    let prefixLength: number = startPrefixLength;
-    while (true) {
-      subnetMasks.push(this.create(prefixLength));
-      if (prefixLength === endPrefixLength) {
-        break;
-      }
-      prefixLength--;
-    }
-
-    return subnetMasks;
+    // Convert value to binary string and count how many bits are set
+    return value.toString(2).split('1').length - 1;
   }
 }
+
+// SubnetMask.getAllValues().forEach(e => {
+//   console.log(`${e.toString(16).padStart(8,'0')} => ${SubnetMask.getPrefixLength(e)}`);
+// });
