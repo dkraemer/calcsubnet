@@ -3,6 +3,7 @@ import { Radix } from './radix';
 
 export abstract class DotDecimal implements Dumpable {
   public readonly hexString: string;
+  public readonly octets: number[];
   public readonly dotDecimalString: string;
 
   protected constructor(public readonly value: number) {
@@ -11,6 +12,7 @@ export abstract class DotDecimal implements Dumpable {
     }
 
     this.hexString = this.toHexString();
+    this.octets = this.getOctets();
     this.dotDecimalString = this.toDotDecimalString();
   }
 
@@ -69,15 +71,20 @@ export abstract class DotDecimal implements Dumpable {
     return prefix + hexValue;
   }
 
-  private toDotDecimalString(): string {
+  private getOctets(): number[] {
     const regExp = /^(.{2})(.{2})(.{2})(.{2})$/;
     const hexString = this.toHexString(false);
     const octets = DotDecimal.parseOctets(regExp, hexString, Radix.Hex);
     if (!octets) {
       throw new Error();
     }
+    return octets;
+  }
 
+  private toDotDecimalString(): string {
+    const octets = this.getOctets();
     const octetStrings: string[] = [];
+
     octets.forEach(e => {
       octetStrings.push(e.toFixed());
     });
