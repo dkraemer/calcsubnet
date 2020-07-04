@@ -10,26 +10,32 @@ test('DotDecimal(value)', () => {
   expect(() => {
     new DotDecimalMock(-1);
   }).toThrow(Error);
+
   expect(() => {
     new DotDecimalMock(0x1ffffffff);
   }).toThrow(Error);
+
   expect(new DotDecimalMock(1).value).toBe(1);
+
   expect(new DotDecimalMock(0).hexString).toBe('0x00000000');
-  expect(new DotDecimalMock(11259375).hexString).toBe('0x00abcdef');
+  expect(new DotDecimalMock(0xabcdefab).hexString).toBe('0xabcdefab');
+
+  expect(new DotDecimalMock(0).binString).toBe('00000000000000000000000000000000');
+  expect(new DotDecimalMock(0xabcdefab).binString).toBe('10101011110011011110111110101011');
+
   expect(new DotDecimalMock(0).octets.length).toBe(4);
   expect(new DotDecimalMock(0).octets[0]).toBe(0);
   expect(new DotDecimalMock(0).octets[1]).toBe(0);
   expect(new DotDecimalMock(0).octets[2]).toBe(0);
   expect(new DotDecimalMock(0).octets[3]).toBe(0);
-  expect(new DotDecimalMock(11259375).octets.length).toBe(4);
-  expect(new DotDecimalMock(11259375).octets[0]).toBe(0);
-  expect(new DotDecimalMock(11259375).octets[1]).toBe(0xab);
-  expect(new DotDecimalMock(11259375).octets[2]).toBe(0xcd);
-  expect(new DotDecimalMock(11259375).octets[3]).toBe(0xef);
+  expect(new DotDecimalMock(0xabcdefab).octets.length).toBe(4);
+  expect(new DotDecimalMock(0xabcdefab).octets[0]).toBe(0xab);
+  expect(new DotDecimalMock(0xabcdefab).octets[1]).toBe(0xcd);
+  expect(new DotDecimalMock(0xabcdefab).octets[2]).toBe(0xef);
+  expect(new DotDecimalMock(0xabcdefab).octets[3]).toBe(0xab);
+
   expect(new DotDecimalMock(0).dotDecimalString).toBe('0.0.0.0');
-  expect(new DotDecimalMock(2212237532).dotDecimalString).toBe('131.220.16.220');
   expect(new DotDecimalMock(0x83dc10dc).dotDecimalString).toBe('131.220.16.220');
-  expect(new DotDecimalMock(0b10000011110111000001000011011100).dotDecimalString).toBe('131.220.16.220');
 });
 
 test('DotDecimal.parse(DotDecimalMock, ...)', () => {

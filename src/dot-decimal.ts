@@ -3,6 +3,7 @@ import { Radix } from './radix';
 
 export abstract class DotDecimal implements Dumpable {
   public readonly hexString: string;
+  public readonly binString: string;
   public readonly octets: number[];
   public readonly dotDecimalString: string;
 
@@ -12,6 +13,7 @@ export abstract class DotDecimal implements Dumpable {
     }
 
     this.hexString = this.toHexString();
+    this.binString = this.toBinString();
     this.octets = this.getOctets();
     this.dotDecimalString = this.toDotDecimalString();
   }
@@ -69,6 +71,17 @@ export abstract class DotDecimal implements Dumpable {
     }
 
     return prefix + hexValue;
+  }
+
+  private toBinString(): string {
+    let binValue = this.value.toString(Radix.Bin);
+
+    // Ensure a length of 32 bits (32 chars)
+    while (binValue.length < 32) {
+      binValue = '0' + binValue;
+    }
+
+    return binValue;
   }
 
   private getOctets(): number[] {
